@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Horários</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+
+    <!-- Mensagens Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Horários Cadastrados</h2>
+        </div>
+
+        <div class="card-body">
+            {% if horarios %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover text-center align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Dia da Semana</th>
+                                <th>Hora</th>
+                                <th>Faixa</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for horario in horarios %}
+                            <tr>
+                                <td>{{ horario.dia_semana }}</td>
+                                <td>{{ horario.hora }}</td>
+                                <td>{{ horario.faixa }}</td>
+                                <td>
+                                    <a class="btn btn-danger btn-sm" href="{{ url_for('excluir_horario', horario_id=horario.id) }}" onclick="return confirm('Deseja realmente excluir este horário?')">Excluir</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm" href="{{ url_for('editar_horario', horario_id=horario.id) }}">Editar</a>
+                                    <a class="btn btn-danger btn-sm" href="{{ url_for('excluir_horario', horario_id=horario.id) }}" onclick="return confirm('Deseja realmente excluir este horário?')">Excluir</a>
+                                </td>
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center" role="alert">
+                    Nenhum horário cadastrado ainda.
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card-footer text-center">
+            <a href="{{ url_for('admin_painel') }}" class="btn btn-secondary">Voltar ao Painel</a>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
